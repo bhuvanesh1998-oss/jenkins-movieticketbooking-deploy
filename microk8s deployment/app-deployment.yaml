@@ -1,8 +1,8 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: movie-ticket-deployment
-  namespace: movie-springapplication
+  name: movie-ticket-deployment-jenkins
+  namespace: movie-jenkins
 spec:
   selector:
     matchLabels:
@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: springboot-crud-k8s
-          image: udhaya21/movie-ticket-spring
+          image: udhaya21/movie-jenkins
           ports:
             - containerPort: 8090
           env:
@@ -33,8 +33,8 @@ spec:
 apiVersion: v1 # Kubernetes API version
 kind: Service # Kubernetes resource kind we are creating
 metadata: # Metadata of the resource kind we are creating
-  name: movie-ticket-svc
-  namespace: movie-springapplication
+  name: movie-ticket-svc-jenkins
+  namespace: movie-jenkins
 spec:
   selector:
     app: springboot-k8s-mysql
