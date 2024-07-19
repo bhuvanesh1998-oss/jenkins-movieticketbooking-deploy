@@ -18,7 +18,8 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    def customImage = docker.build(DOCKER_IMAGE)
+                    // Define customImage in a broader scope
+                    customImage = docker.build(DOCKER_IMAGE)
                 }
             }
         }
