@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: movie-ticket-deployment
+  namespace: movie-springapplication
+spec:
+  selector:
+    matchLabels:
+      app: springboot-k8s-mysql
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: springboot-k8s-mysql
+    spec:
+      containers:
+        - name: springboot-crud-k8s
+          image: udhaya21/movie-ticket-spring
+          ports:
+            - containerPort: 8090
+          env:
+            - name: DB_HOST
+              value: "mysql"  # Replace with your MySQL host
+            - name: DB_NAME
+              value: "movie-ticket"  # Replace with your database name
+            - name: DB_USERNAME
+              value: "netcon"  # Replace with your database username
+            - name: DB_PASSWORD
+              value: "netcon"  # Replace with your database password
+
+---
+
+apiVersion: v1 # Kubernetes API version
+kind: Service # Kubernetes resource kind we are creating
+metadata: # Metadata of the resource kind we are creating
+  name: movie-ticket-svc
+  namespace: movie-springapplication
+spec:
+  selector:
+    app: springboot-k8s-mysql
+  ports:
+    - protocol: "TCP"
+      port: 8090 # The port that the service is running on in the cluster
+      targetPort: 8090 # The port exposed by the service
+  type: NodePort # type of the service.
