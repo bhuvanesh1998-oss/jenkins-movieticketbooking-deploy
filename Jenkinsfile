@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        KUBECONFIG = credentials('movie-jenkins-config')
+        KUBECONFIG = credentials('chinnavar-config')
         DOCKER_CREDENTIALS_ID = 'docker-bhuvanesh'
         DOCKER_IMAGE = 'bhuvaneshnexn/movie-jenkins'
         //K8S_NAMESPACE = 'movie-jenkins'
