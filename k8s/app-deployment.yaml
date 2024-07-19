@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: movie-ticket-deployment
+  name: movie-ticket-testing
 spec:
   selector:
     matchLabels:
@@ -32,7 +32,7 @@ spec:
 apiVersion: v1 # Kubernetes API version
 kind: Service # Kubernetes resource kind we are creating
 metadata: # Metadata of the resource kind we are creating
-  name: movie-ticket-svc
+  name: movie-ticket-svc-testing
 spec:
   selector:
     app: springboot-k8s-mysql
