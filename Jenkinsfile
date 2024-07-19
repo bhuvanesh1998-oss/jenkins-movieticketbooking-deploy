@@ -46,7 +46,7 @@ pipeline {
 
                     // Apply Kubernetes manifests
                    // sh 'microk8s kubectl create namespace movie-jenkins'
-                    sh 'microk8s kubectl apply -f k8s/'
+                    sh 'kubectl apply -f k8s/'
                 }
             }
         }
