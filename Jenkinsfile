@@ -10,8 +10,11 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                // Checkout the source code from the repository
-                git branch: 'main', url: 'https://github.com/udhaya1148/Jenkins-deploy.git'
+                script {
+                    retry(3) {
+                        git branch: 'main', url: 'https://github.com/udhaya1148/Jenkins-deploy.git'
+                    }
+                }
             }
         }
 
@@ -41,9 +44,9 @@ pipeline {
                     writeFile file: 'kubeconfig', text: KUBECONFIG
                     withEnv(["KUBECONFIG=${pwd()}/kubeconfig"]) {
                         // Apply Kubernetes deployment
-                        sh 'microk8s kubectl create namespace movie-jenkins'
-                        sh 'microk8s kubectl apply -f microk8s deployment/database-deployment.yaml'
-                        sh 'microk8s kubectl apply -f microk8s deployment/app-deployment.yaml'
+                        sh 'microk8s kubectl create namespace movie-jenkins || true'
+                        sh 'microk8s kubectl apply -f microk8s/deployment/database-deployment.yaml'
+                        sh 'microk8s kubectl apply -f microk8s/deployment/app-deployment.yaml'
                     }
                 }
             }
@@ -52,7 +55,9 @@ pipeline {
 
     post {
         always {
-            cleanWs()
+            node {
+                cleanWs()
+            }
         }
     }
 }
