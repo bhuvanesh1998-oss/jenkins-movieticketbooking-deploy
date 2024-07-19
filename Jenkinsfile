@@ -4,7 +4,7 @@ pipeline {
     environment {
         KUBECONFIG = credentials('chinnavar-config')
         DOCKER_CREDENTIALS_ID = 'docker-bhuvanesh'
-        DOCKER_IMAGE = 'bhuvaneshnexn/chinnavar-ticket-jenkins-person'
+        DOCKER_IMAGE = 'bhuvaneshnexn/chinnavar-ticket-jenkins-persons'
         //K8S_NAMESPACE = 'movie-jenkins'
     }
     options {
@@ -45,8 +45,8 @@ pipeline {
                     sh 'export KUBECONFIG=kubeconfig'
 
                     // Apply Kubernetes manifests
-                    sh 'kubectl create namespace ticket-jenkins'
-                    sh 'kubectl apply -f k8s/ -n ticket-jenkins'
+                    sh 'microk8s kubectl create namespace ticket-jenkins23'
+                    sh 'microk8s kubectl apply -f k8s/ -n ticket-jenkins23'
                 }
             }
         }
