@@ -4,7 +4,7 @@ pipeline {
     environment {
         KUBECONFIG = credentials('chinnavar-config')
         DOCKER_CREDENTIALS_ID = 'docker-bhuvanesh'
-        DOCKER_IMAGE = 'bhuvaneshnexn/chinnavar-ticket-jenkins-persons'
+        DOCKER_IMAGE = 'bhuvaneshnexn/chinnavar-ticket-jenkins-persons234'
         //K8S_NAMESPACE = 'movie-jenkins'
     }
     options {
@@ -15,7 +15,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 script {
-                    git credentialsId: 'Github-udhaya1148', url: 'https://github.com/udhaya1148/Jenkins-deploy.git', branch: 'main'
+                    git credentialsId: 'github-udhaya', url: 'https://github.com/udhaya1148/Jenkins-deploy.git', branch: 'main'
                 }
                 // Checkout your application code and Kubernetes manifests from your repository
                // git 'https://github.com/Bhuvaneshnetcon/k8s-jenkins'
@@ -45,8 +45,8 @@ pipeline {
                     sh 'export KUBECONFIG=kubeconfig'
 
                     // Apply Kubernetes manifests
-                    sh 'kubectl create namespace ticket-jenkins23'
-                    sh 'kubectl apply -f k8s/ -n ticket-jenkins23'
+                    sh 'microk8s kubectl create namespace ticket-jenkins234'
+                    sh 'microk8s kubectl apply -f k8s/ -n ticket-jenkins234'
                 }
             }
         }
