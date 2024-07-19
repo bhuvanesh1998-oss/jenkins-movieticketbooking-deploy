@@ -15,7 +15,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 script {
-                    git credentialsId: 'Github-udhaya1148', url: 'https://github.com/udhaya1148/Jenkins-deploy.git', branch: 'main'
+                    git credentialsId: 'github-udhaya', url: 'https://github.com/udhaya1148/Jenkins-deploy.git', branch: 'main'
                 }
                 // Checkout your application code and Kubernetes manifests from your repository
                // git 'https://github.com/Bhuvaneshnetcon/k8s-jenkins'
