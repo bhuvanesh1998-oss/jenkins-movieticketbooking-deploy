@@ -45,8 +45,8 @@ pipeline {
                     sh 'export KUBECONFIG=kubeconfig'
 
                     // Apply Kubernetes manifests
-                   // sh 'microk8s kubectl create namespace movie-jenkins'
-                    sh 'kubectl apply -f k8s/'
+                    sh 'kubectl create namespace ticket-jenkins'
+                    sh 'kubectl apply -f k8s/ -n ticket-jenkins'
                 }
             }
         }
