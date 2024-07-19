@@ -4,7 +4,7 @@ pipeline {
     environment {
         KUBECONFIG = credentials('chinnavar-config')
         DOCKER_CREDENTIALS_ID = 'docker-bhuvanesh'
-        DOCKER_IMAGE = 'bhuvaneshnexn/chinnavar-ticket-jenkins'
+        DOCKER_IMAGE = 'bhuvaneshnexn/chinnavar-ticket-jenkins-person'
         //K8S_NAMESPACE = 'movie-jenkins'
     }
     options {
