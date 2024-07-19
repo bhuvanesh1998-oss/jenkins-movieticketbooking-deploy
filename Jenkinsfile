@@ -2,52 +2,51 @@ pipeline {
     agent any
 
     environment {
-        DOCKERHUB_CREDENTIALS = 'docker-bhuvanesh' // Ensure this ID matches the credentials in Jenkins
+        KUBECONFIG = credentials('movie-jenkins-config')
+        DOCKER_CREDENTIALS_ID = 'docker-bhuvanesh'
         DOCKER_IMAGE = 'bhuvaneshnexn/movie-jenkins'
-        KUBECONFIG = credentials('movie-jenkins-config') // Ensure this ID matches the kubeconfig credentials in Jenkins
+        //K8S_NAMESPACE = 'movie-jenkins'
+    }
+    options {
+        retry(3) // Retry stages 3 times if they fail
     }
 
     stages {
         stage('Checkout') {
             steps {
                 script {
-                    retry(3) {
-                        git branch: 'main', url: 'https://github.com/udhaya1148/Jenkins-deploy.git'
-                    }
+                    git credentialsId: 'bhuvaneshnetcon-github', url: 'https://github.com/Bhuvaneshnetcon/k8s-jenkins', branch: 'main'
                 }
+                // Checkout your application code and Kubernetes manifests from your repository
+               // git 'https://github.com/Bhuvaneshnetcon/k8s-jenkins'
             }
         }
 
         stage('Build Docker Image') {
             steps {
                 script {
-                    // Define customImage in a broader scope
-                    customImage = docker.build(DOCKER_IMAGE)
-                }
-            }
-        }
-
-        stage('Push Docker Image') {
-            steps {
-                script {
-                    docker.withRegistry('https://index.docker.io/v1/', DOCKERHUB_CREDENTIALS) {
-                        customImage.push()
+                    // Build and push Docker image
+                    withCredentials([usernamePassword(credentialsId: DOCKER_CREDENTIALS_ID, passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
+                        sh """
+                        docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+                        docker build -t $DOCKER_IMAGE .
+                        docker push $DOCKER_IMAGE
+                        """
                     }
                 }
             }
         }
 
-        stage('Deploy to MicroK8s') {
+        stage('Deploy to Kubernetes') {
             steps {
                 script {
-                    // Save kubeconfig content to a file
-                    writeFile file: 'kubeconfig', text: KUBECONFIG
-                    withEnv(["KUBECONFIG=${pwd()}/kubeconfig"]) {
-                        // Apply Kubernetes deployment
-                        sh 'microk8s kubectl create namespace movie-jenkins || true'
-                        sh 'microk8s kubectl apply -f k8s/database-deployment.yaml --namespace=movie-jenkins'
-                        sh 'microk8s kubectl apply -f k8s/app-deployment.yaml --namespace=movie-jenkins'
-                    }
+                    // Set the kubeconfig environment variable
+                    sh 'echo $KUBECONFIG > kubeconfig'
+                    sh 'export KUBECONFIG=kubeconfig'
+
+                    // Apply Kubernetes manifests
+                    sh 'microk8s kubectl create namespace movie-jenkins'
+                    sh 'microk8s kubectl apply -f k8s/ -n movie-jenkins'
                 }
             }
         }
@@ -55,7 +54,8 @@ pipeline {
 
     post {
         always {
-            cleanWs()
+            // Clean up
+            sh 'rm -f kubeconfig'
         }
     }
 }
