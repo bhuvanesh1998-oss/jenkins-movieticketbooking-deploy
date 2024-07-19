@@ -44,9 +44,9 @@ pipeline {
                     writeFile file: 'kubeconfig', text: KUBECONFIG
                     withEnv(["KUBECONFIG=${pwd()}/kubeconfig"]) {
                         // Apply Kubernetes deployment
-                        sh 'microk8s kubectl create namespace movie-jenkins  || true'
-                        sh 'microk8s kubectl apply -f k8s/database-deployment.yaml -n movie-jenkins'
-                        sh 'microk8s kubectl apply -f k8s/app-deployment.yaml -n movie-jenkins'
+                        sh 'microk8s kubectl create namespace movie-jenkins || true'
+                        sh 'microk8s kubectl apply -f k8s/database-deployment.yaml --namespace=movie-jenkins'
+                        sh 'microk8s kubectl apply -f k8s/app-deployment.yaml --namespace=movie-jenkins'
                     }
                 }
             }
