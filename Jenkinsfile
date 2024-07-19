@@ -2,9 +2,9 @@ pipeline {
     agent any
 
     environment {
-        DOCKERHUB_CREDENTIALS = credentials('Docker-udhaya21') // Replace 'dockerhub' with the ID of your Docker Hub credentials in Jenkins
-        DOCKER_IMAGE = 'udhaya21/movie-jenkins' // Replace with your Docker Hub username and image name
-        KUBECONFIG = credentials('movie-jenkins-config') // Replace 'kubeconfig' with the ID of your kubeconfig file in Jenkins
+        DOCKERHUB_CREDENTIALS = credentials('Docker-udhaya21') // Ensure this ID matches the credentials in Jenkins
+        DOCKER_IMAGE = 'udhaya21/movie-jenkins'
+        KUBECONFIG = credentials('movie-jenkins-config') // Ensure this ID matches the kubeconfig credentials in Jenkins
     }
 
     stages {
@@ -26,7 +26,7 @@ pipeline {
         stage('Push Docker Image') {
             steps {
                 script {
-                    docker.withRegistry('https://index.docker.io/v1/', 'DOCKERHUB_CREDENTIALS') {
+                    docker.withRegistry('https://index.docker.io/v1/', DOCKERHUB_CREDENTIALS) {
                         customImage.push()
                     }
                 }
