@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKERHUB_CREDENTIALS = credentials('docker-bhuvanesh') // Ensure this ID matches the credentials in Jenkins
+        DOCKERHUB_CREDENTIALS = 'docker-bhuvanesh' // Ensure this ID matches the credentials in Jenkins
         DOCKER_IMAGE = 'bhuvaneshnexn/movie-jenkins'
         KUBECONFIG = credentials('movie-jenkins-config') // Ensure this ID matches the kubeconfig credentials in Jenkins
     }
