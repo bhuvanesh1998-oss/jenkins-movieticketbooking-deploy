@@ -18,7 +18,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    docker.build -t (DOCKER_IMAGE)
+                    def customImage = docker.build(DOCKER_IMAGE)
                 }
             }
         }
@@ -27,7 +27,7 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry('https://index.docker.io/v1/', 'DOCKERHUB_CREDENTIALS') {
-                        docker.image(DOCKER_IMAGE).push()
+                        customImage.push()
                     }
                 }
             }
